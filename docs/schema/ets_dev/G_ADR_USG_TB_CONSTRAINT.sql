@@ -1,0 +1,22 @@
+--------------------------------------------------------
+--  Constraints for Table G_ADR_USG_TB
+--------------------------------------------------------
+
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" ADD ;
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" MODIFY ("G_CMN_ENTY_SK" NOT NULL );
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" MODIFY ("G_ADR_USG_TY_CD" NOT NULL );
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" MODIFY ("G_ADR_SK" NOT NULL );
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" MODIFY ("G_ADR_USG_SEQ_NUM" NOT NULL );
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" MODIFY ("G_ADR_USG_END_DT" NOT NULL );
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" MODIFY ("G_ADR_USG_BEG_DT" NOT NULL );
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" MODIFY ("L_HIBERNATE_VER_NUM" NOT NULL );
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" MODIFY ("G_AUD_USER_ID" NOT NULL );
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" MODIFY ("G_AUD_TS" NOT NULL );
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" MODIFY ("G_AUD_ADD_USER_ID" NOT NULL );
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" MODIFY ("G_AUD_ADD_TS" NOT NULL );
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" MODIFY ("G_DUMMY_IND" NOT NULL );
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" ADD ;
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" ADD ;
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" ADD ;
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" ADD CONSTRAINT "G_ADR_USG_PK" PRIMARY KEY ("G_CMN_ENTY_SK", "G_ADR_USG_TY_CD", "G_ADR_SK", "G_ADR_USG_SEQ_NUM") ;
+  ALTER TABLE "ets_dev"."G_ADR_USG_TB" ADD ;

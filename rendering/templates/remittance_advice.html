@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  /* NFR 5.2: exact pagination + widow/orphan control */
+  @page { size: Letter; margin: 0.75in; }
+  body { font-family: Arial, sans-serif; font-size: 10pt; orphans: 3; widows: 3; }
+  h1 { font-size: 14pt; border-bottom: 2px solid #000; padding-bottom: 4px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  td, th { border: 1px solid #333; padding: 4px 8px; text-align: left; }
+  .barcode { margin-top: 24px; }
+  .no-break { break-inside: avoid; }
+</style>
+</head>
+<body>
+  <h1>Remittance Advice</h1>
+  <div class="no-break">
+    <p>{{ recipient.name }}<br>
+       {{ recipient.address_line1 }}<br>
+       {{ recipient.city }}, {{ recipient.state }} {{ recipient.zip }}</p>
+  </div>
+
+  <table>
+    <tr><th>Claim ID</th><td>{{ fields.claim_id }}</td></tr>
+    <tr><th>Service Date</th><td>{{ fields.service_date }}</td></tr>
+    <tr><th>Billed Amount</th><td>${{ fields.billed_amount }}</td></tr>
+    <tr><th>Paid Amount</th><td>${{ fields.paid_amount }}</td></tr>
+  </table>
+
+  <div class="barcode">
+    {{ barcode_svg | safe }}
+  </div>
+</body>
+</html>

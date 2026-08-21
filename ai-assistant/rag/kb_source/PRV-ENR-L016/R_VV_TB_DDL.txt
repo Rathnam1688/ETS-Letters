@@ -1,0 +1,71 @@
+
+ --------------------------------------------------------
+--  DDL for Table R_VV_TB
+--------------------------------------------------------
+
+ CREATE TABLE "NHMMIS52E2"."R_VV_TB" 
+   (	"R_VV_DOMAIN_NAM" VARCHAR2(30 BYTE) NOT NULL ENABLE, 
+	"R_VV_CD" VARCHAR2(15 BYTE) NOT NULL ENABLE, 
+	"R_VOID_DT" DATE, 
+	"R_VV_SHORT_DESC" VARCHAR2(10 BYTE), 
+	"R_VV_LONG_DESC" VARCHAR2(40 BYTE), 
+	"L_HIBERNATE_VER_NUM" NUMBER(9,0) DEFAULT 0 NOT NULL ENABLE, 
+	"G_AUD_USER_ID" VARCHAR2(30 BYTE) NOT NULL ENABLE, 
+	"G_AUD_TS" TIMESTAMP (6) DEFAULT SYSDATE NOT NULL ENABLE, 
+	"G_AUD_ADD_USER_ID" VARCHAR2(30 BYTE) NOT NULL ENABLE, 
+	"G_AUD_ADD_TS" TIMESTAMP (6) DEFAULT SYSDATE NOT NULL ENABLE, 
+	"R_CNSTNT_TEXT" VARCHAR2(50 BYTE), 
+	"R_USED_IN_APPL_IND" VARCHAR2(1 BYTE) DEFAULT 'N' NOT NULL ENABLE, 
+	 SUPPLEMENTAL LOG DATA (ALL) COLUMNS, 
+	 SUPPLEMENTAL LOG DATA (PRIMARY KEY) COLUMNS, 
+	 SUPPLEMENTAL LOG DATA (UNIQUE INDEX) COLUMNS, 
+	 SUPPLEMENTAL LOG DATA (FOREIGN KEY) COLUMNS, 
+	 SUPPLEMENTAL LOG GROUP "GGS_641114" ("R_VV_DOMAIN_NAM", "R_VV_CD") ALWAYS, 
+	 CONSTRAINT "R_VV_F1" FOREIGN KEY ("R_VV_DOMAIN_NAM")
+	  REFERENCES "NHMMIS52E2"."R_VV_DOMAIN_TB" ("R_VV_DOMAIN_NAM") ENABLE
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ ROW STORE COMPRESS ADVANCED LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL KEEP FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "Z_M_D_NHMMIS52E2" ;
+  CREATE UNIQUE INDEX "NHMMIS52E2"."R_VV_PK" ON "NHMMIS52E2"."R_VV_TB" ("R_VV_DOMAIN_NAM", "R_VV_CD") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS COMPRESS ADVANCED LOW 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL KEEP FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "Z_M_I_NHMMIS52E2" ;
+ALTER TABLE "NHMMIS52E2"."R_VV_TB" ADD CONSTRAINT "R_VV_PK" PRIMARY KEY ("R_VV_DOMAIN_NAM", "R_VV_CD")
+  USING INDEX "NHMMIS52E2"."R_VV_PK"  ENABLE;
+
+   COMMENT ON COLUMN "NHMMIS52E2"."R_VV_TB"."R_VV_DOMAIN_NAM" IS 'Valid Value Domain Name.  This is the data domain as defined in R_VV_DOMAIN_TB, with which a set of valid values may be associated.';
+   COMMENT ON COLUMN "NHMMIS52E2"."R_VV_TB"."R_VV_CD" IS 'Valid Value Code.  This identifies one specific valid value for the associated data domain.';
+   COMMENT ON COLUMN "NHMMIS52E2"."R_VV_TB"."R_VOID_DT" IS 'The date the associated data was inactivated';
+   COMMENT ON COLUMN "NHMMIS52E2"."R_VV_TB"."R_VV_SHORT_DESC" IS 'Short Description of the valid value code.';
+   COMMENT ON COLUMN "NHMMIS52E2"."R_VV_TB"."R_VV_LONG_DESC" IS 'Long description of the valid value code.';
+   COMMENT ON COLUMN "NHMMIS52E2"."R_VV_TB"."L_HIBERNATE_VER_NUM" IS 'This supports hibernate caching mechanism and also supports the pessimistic Locking mechanism';
+   COMMENT ON COLUMN "NHMMIS52E2"."R_VV_TB"."G_AUD_USER_ID" IS 'The user ID or process that last modified the row.';
+   COMMENT ON COLUMN "NHMMIS52E2"."R_VV_TB"."G_AUD_TS" IS 'The timestamp when the row was last modified.';
+   COMMENT ON COLUMN "NHMMIS52E2"."R_VV_TB"."G_AUD_ADD_USER_ID" IS 'The user ID or process that added the row.';
+   COMMENT ON COLUMN "NHMMIS52E2"."R_VV_TB"."G_AUD_ADD_TS" IS 'The timestamp when the row was added.';
+   COMMENT ON COLUMN "NHMMIS52E2"."R_VV_TB"."R_CNSTNT_TEXT" IS 'This column is used to generate a constant
+ file that can be used in java code as a mnemonic for code values, rather than hard coding the codes
+ themselves.';
+   COMMENT ON COLUMN "NHMMIS52E2"."R_VV_TB"."R_USED_IN_APPL_IND" IS 'Indicates that a valid value is used within the application code.';
+   COMMENT ON TABLE "NHMMIS52E2"."R_VV_TB"  IS 'The Reference Valid Value Table defines the set of valid values that are associated with a specific data domain, and is used for all generic code fields which do not require any additional information, other than a long and short description, and whose set of valid values are reasonably limited in number.';
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "NHMMIS52E2"."R_CNSTNT_TR" 
+   BEFORE INSERT
+   ON NHMMIS52E2.R_VV_TB
+   REFERENCING NEW AS NEW OLD AS OLD
+   FOR EACH ROW
+BEGIN
+   IF :new.r_cnstnt_text IS NULL
+   THEN
+      :new.r_cnstnt_text :=
+              replace_invalid_fn (UPPER ('VV_' || UPPER (:new.r_vv_short_desc)));
+   END IF;
+END r_cnstnt_tr;
+/
+ALTER TRIGGER "NHMMIS52E2"."R_CNSTNT_TR" ENABLE;

@@ -1,0 +1,32 @@
+# Scheduled trigger: polls ets_dev for letters ready to generate and
+# enqueues them via the existing render-jobs queue. Runs every 15
+# minutes — adjust per how time-sensitive "ready today" actually needs
+# to be; nothing in queue/db_poller.py assumes this specific interval.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: db-poller
+  namespace: doc-platform
+spec:
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: Forbid  # don't overlap runs if one poll cycle takes >15min
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: db-poller
+              image: registry.internal.local/doc-platform/rendering-worker:latest
+              command: ["python", "-m", "queue.db_poller"]
+              env:
+                - name: DB_CONNECTION_STRING
+                  valueFrom:
+                    secretKeyRef:
+                      name: ets-dev-credentials
+                      key: connection_string
+                - name: QUEUE_HOST
+                  value: rabbitmq.doc-platform.svc.cluster.local
+              resources:
+                requests: { cpu: "100m", memory: "128Mi" }
+                limits: { cpu: "500m", memory: "256Mi" }

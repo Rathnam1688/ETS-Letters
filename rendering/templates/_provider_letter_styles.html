@@ -1,0 +1,56 @@
+{#
+  Shared styles for Provider-domain prose letters (header block +
+  address block + body paragraph conventions). Coordinates measured
+  from the legacy PDFs via pdfplumber — see docs/ARCHITECTURE.md.
+  {% include %} this inside each letter template's <style> block.
+
+  Unlike PRV-ENR-L016 (a rigid form — absolute-positioned fields,
+  see that template's own notes on why), these are genuinely flowing
+  prose letters: paragraphs, justified body text, natural page breaks.
+  CSS flow layout (not absolute positioning) is the right tool here.
+#}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 12pt;
+  color: #000;
+  line-height: 14pt;
+}
+.page { position: relative; width: 612pt; min-height: 792pt; padding: 36pt; }
+.page + .page { page-break-before: always; }
+
+/* Address-only window-envelope page (page 1 in every sample) */
+.address-page-date { position: absolute; top: 72pt; left: 396pt; }
+.address-page-recipient { position: absolute; top: 108pt; left: 36pt; line-height: 15.6pt; }
+.address-page-barcode { position: absolute; bottom: 36pt; left: 36pt; }
+
+/* Letterhead block (shared header include) */
+.letterhead { position: relative; height: 130pt; margin-bottom: 6pt; }
+.agency-seal { position: absolute; top: 3pt; left: 8pt; width: 76.5pt; height: 72pt; }
+.agency-title { position: absolute; top: 15pt; left: 92pt; right: 0; text-align: center; font-weight: bold; font-size: 12pt; }
+.agency-title p { margin-bottom: 3pt; }
+.agency-officials { position: absolute; top: 73pt; left: 0; width: 92pt; text-align: center; font-size: 9pt; }
+.agency-officials .official-name { font-weight: bold; margin-top: 8pt; }
+.agency-officials .official-title { font-style: italic; }
+.agency-contact { position: absolute; top: 77pt; left: 92pt; right: 0; text-align: center; font-weight: bold; font-size: 9pt; }
+.agency-contact p { margin-bottom: 2pt; }
+
+.letter-date { text-align: right; margin: 16pt 0 24pt; }
+.recipient-block { line-height: 15.6pt; margin-bottom: 16pt; }
+.re-block { margin-bottom: 16pt; }
+.re-block .re-line2 { margin-left: 26pt; }
+.letter-title { text-align: center; font-weight: bold; margin-bottom: 22pt; }
+.salutation { margin-bottom: 14pt; }
+.body-text p { text-align: justify; margin-bottom: 12pt; text-indent: 27pt; }
+.body-text p.no-indent { text-indent: 0; }
+.body-text p.center-block { text-align: center; text-indent: 0; font-weight: bold; }
+.body-text ul { margin: 0 0 12pt 63pt; }
+.body-text li { margin-bottom: 4pt; }
+.signature-block { margin-top: 20pt; text-align: right; }
+.signature-block p { margin-bottom: 24pt; }
+
+.continuation-header { margin-bottom: 20pt; }
+
+.footer-barcode { position: absolute; bottom: 36pt; left: 36pt; }
+.footer-letter-id { position: absolute; bottom: 36pt; right: 36pt; font-size: 10pt; }
+.footer-label { position: absolute; bottom: 50pt; right: 36pt; font-size: 10pt; text-align: right; }

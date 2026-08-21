@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  /*
+    *** SANDBOX DEBUG FILE — NOT FOR PRODUCTION USE ***
+
+    Pre-compensates for a scale distortion specific to this sandbox's
+    wkhtmltopdf 0.12.6 (unpatched Qt) build. The compensation is an
+    imperfect linear fit (measured/fitted near the TOP of the page,
+    residual ~1-2pt there) that does NOT hold up across the full page
+    height — verified residual drift grows to ~18pt by the bottom of
+    the page (the "Reason for Submission" row lands at measured
+    top=667pt vs a target of 684.88pt). This is disclosed, not hidden:
+    treat any visual match from this file as "structurally correct,
+    proves the layout/colors/positions are right" — NOT as proof of
+    pixel-perfect match. Do not tighten this compensation further; the
+    right fix is rendering prv_enr_l016.html (the real production
+    template, true measured coordinates, no compensation) through
+    Playwright or another standards-compliant renderer, per
+    docs/PENDING.md.
+*/
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 796.53pt; height: 1030.253pt; }
+  body {
+    position: relative;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 13pt;
+    color: #000;
+  }
+  .abs { position: absolute; white-space: nowrap; }
+  .wrap { position: absolute; white-space: normal; }
+
+  .seal { position: absolute; top: 91.077pt; left: 46.855pt; width: 101.519pt; height: 100.424pt; }
+  .barcode-img { position: absolute; top: 962.630pt; left: 10.412pt; width: 222.561pt; height: 55.935pt; }
+
+  .header-line1 { top: 109.028pt; left: 194.448pt; font-size: 14.3pt; }
+  .header-line2 { top: 141.939pt; left: 273.190pt; font-size: 14.3pt; }
+  .submitted    { top: 209.582pt; left: 46.855pt; font-size: 14.3pt; }
+
+  .section-bar {
+    position: absolute; left: 39.501pt; width: 716.879pt;
+    top: 241.257pt; height: 17.106pt;
+    background: #000; color: #fff; text-align: center; font-weight: bold;
+    line-height: 17.106pt; font-size: 13pt;
+  }
+  .subsection-bar {
+    position: absolute; left: 39.501pt; width: 716.879pt;
+    background: #A6A6A6; color: #000; text-align: center; font-weight: bold;
+    font-size: 13pt;
+  }
+  .sub-provider-info    { top: 275.456pt; height: 24.911pt; line-height: 24.911pt; }
+  .sub-provider-ids     { top: 371.457pt; height: 24.911pt; line-height: 24.911pt; }
+  .sub-provider-contact { top: 526.957pt; height: 24.911pt; line-height: 24.911pt; }
+  .sub-financial-inst   { top: 634.796pt; height: 24.911pt; line-height: 24.911pt; }
+  .sub-submission       { top: 845.126pt; height: 24.911pt; line-height: 24.911pt; }
+
+  .letter-id { top: 967.260pt; left: 662.215pt; font-size: 13pt; }
+</style>
+</head>
+<body>
+  <img class="seal" src="{{ state_seal_path }}" alt="State Seal">
+  <div class="abs header-line1">{{ agency_name }}</div>
+  <div class="abs header-line2">EFT Enrollment Application</div>
+  <div class="abs submitted">Submitted on: &nbsp;{{ fields.letter_date }}</div>
+
+  <div class="section-bar">General and Financial Information</div>
+
+  <div class="subsection-bar sub-provider-info">Provider Information</div>
+  <div class="abs" style="top:318.656pt; left:43.992pt; font-size:13pt;">Provider Name: {{ fields.provider_name }}</div>
+  <div class="abs" style="top:318.656pt; left:332.539pt; font-size:13pt;">Doing Business as (DBA) name: {{ fields.dba_name }}</div>
+  <div class="abs" style="top:339.730pt; left:43.992pt; font-size:13pt;">Street: {{ fields.provider_street }}</div>
+  <div class="abs" style="top:339.730pt; left:332.539pt; font-size:13pt;">City: {{ fields.provider_city }}</div>
+  <div class="abs" style="top:339.730pt; left:519.959pt; font-size:13pt;">State/Province: {{ fields.provider_state }}</div>
+  <div class="abs" style="top:356.185pt; left:43.992pt; font-size:13pt;">Zip Code/Postal Code: {{ fields.provider_zip }}</div>
+
+  <div class="subsection-bar sub-provider-ids">Provider Identifiers Information</div>
+  <div class="abs" style="top:398.215pt; left:46.855pt; font-size:13pt;">Provider Federal Tax Identification Number (TIN) or Employer Identification Number (EIN): {{ fields.provider_tin_ein }}</div>
+  <div class="abs" style="top:422.462pt; left:46.855pt; font-size:13pt;">National Provider Identifier (NPI): {{ fields.provider_npi }}</div>
+  <div class="abs" style="top:446.735pt; left:46.855pt; font-size:13pt;">Provider License Number: {{ fields.provider_license_number }}</div>
+  <div class="wrap" style="top:446.735pt; left:285.815pt; width:230pt; font-size:13pt;">License Issuer: {{ fields.license_issuer }}</div>
+  <div class="abs" style="top:446.735pt; left:524.775pt; font-size:13pt;">Provider Type: {{ fields.provider_type }}</div>
+  <div class="abs" style="top:487.438pt; left:46.855pt; font-size:13pt;">Provider Taxonomy Code: {{ fields.provider_taxonomy_code }}</div>
+
+  <div class="subsection-bar sub-provider-contact">Provider Contact Information</div>
+  <div class="wrap" style="top:570.171pt; left:46.855pt; width:280pt; font-size:13pt;">Provider Contact Name: {{ fields.contact_name }}</div>
+  <div class="abs" style="top:570.171pt; left:340.869pt; font-size:13pt;">Title: {{ fields.contact_title }}</div>
+  <div class="abs" style="top:570.171pt; left:548.853pt; font-size:13pt;">Telephone Number: {{ fields.contact_phone }}</div>
+  <div class="abs" style="top:603.082pt; left:46.855pt; font-size:13pt;">Telephone Number Extension: {{ fields.contact_phone_ext }}</div>
+  <div class="abs" style="top:603.082pt; left:285.815pt; font-size:13pt;">Email Address: {{ fields.contact_email }}</div>
+  <div class="abs" style="top:603.082pt; left:524.775pt; font-size:13pt;">Fax Number: {{ fields.contact_fax }}</div>
+
+  <div class="subsection-bar sub-financial-inst">Financial Institution Information</div>
+  <div class="abs" style="top:661.554pt; left:46.855pt; font-size:13pt;">Financial Institution Name: {{ fields.bank_name }}</div>
+  <div class="abs" style="top:685.801pt; left:46.855pt; font-size:13pt;">Street: {{ fields.bank_street }}</div>
+  <div class="abs" style="top:685.801pt; left:285.815pt; font-size:13pt;">City: {{ fields.bank_city }}</div>
+  <div class="abs" style="top:685.801pt; left:481.824pt; font-size:13pt;">State/Province: {{ fields.bank_state }}</div>
+  <div class="abs" style="top:710.074pt; left:46.855pt; font-size:13pt;">Zip Code/Postal Code: {{ fields.bank_zip }}</div>
+  <div class="abs" style="top:710.074pt; left:285.815pt; font-size:13pt;">Financial Institution Routing Number: {{ fields.bank_routing_number }}</div>
+  <div class="abs" style="top:734.335pt; left:46.855pt; font-size:13pt;">Provider's Account Number with Financial Institution: {{ fields.bank_account_number }}</div>
+  <div class="abs" style="top:758.582pt; left:46.855pt; font-size:13pt;">Type of Account at Financial Institution: {{ fields.bank_account_type }}</div>
+  <div class="abs" style="top:782.843pt; left:46.855pt; font-size:13pt;">Financial Institution Telephone Number: {{ fields.bank_phone }}</div>
+  <div class="abs" style="top:807.090pt; left:46.855pt; font-size:13pt;">Account Number Linkage to Provider Identifier: {{ fields.account_linkage }}</div>
+
+  <div class="subsection-bar sub-submission">Submission Information</div>
+  <div class="abs" style="top:888.326pt; left:46.855pt; font-size:13pt;">Reason for Submission: {{ fields.submission_reason }}</div>
+  <div class="abs" style="top:888.326pt; left:335.012pt; font-size:13pt;">Authorized Signature: {{ fields.authorized_signature }}</div>
+
+  <div class="barcode-img">{{ barcode_svg | safe }}</div>
+  <div class="abs letter-id">PRV-ENR-L016</div>
+</body>
+</html>

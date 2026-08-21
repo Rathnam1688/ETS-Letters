@@ -1,0 +1,43 @@
+# BR-06: Developer Experience — templates managed as code via standard
+# Git workflows (branching, PRs). Generic CI syntax; adapt to your
+# internal Git Enterprise / Bitbucket runner.
+
+stages:
+  - validate
+  - test
+  - build
+  - deploy
+
+validate-templates:
+  stage: validate
+  script:
+    # Lint XSL-FO / HTML templates, validate against XSDs in the KB
+    - python rendering/engine/validate_templates.py rendering/templates/
+
+visual-regression:
+  stage: test
+  script:
+    # FR-07: run pixel-diff against golden baselines for every PR
+    - python visual-qa/pixel_diff.py baselines/remittance_advice.pdf render_output/remittance_advice.pdf diff_output/
+
+unit-tests:
+  stage: test
+  script:
+    - pip install -r middleware/requirements.txt --quiet
+    - pytest middleware/ queue/ ai-assistant/ -q
+
+build-images:
+  stage: build
+  script:
+    - docker build -t registry.internal.local/doc-platform/rendering-worker:$CI_COMMIT_SHORT_SHA rendering/
+    - docker build -t registry.internal.local/doc-platform/mfe-ui:$CI_COMMIT_SHORT_SHA mfe-ui/
+  only:
+    - main
+
+deploy-k8s:
+  stage: deploy
+  script:
+    - kubectl apply -f infra/k8s/ -n doc-platform
+  only:
+    - main
+  when: manual  # require explicit approval for prod rollout

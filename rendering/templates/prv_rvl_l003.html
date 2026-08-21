@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+{% include "_provider_letter_styles.html" %}
+</style>
+</head>
+<body>
+
+<!-- Page 1: address-only window envelope page -->
+<div class="page">
+  <div class="address-page-date">{{ fields.letter_date_short }}</div>
+  <div class="address-page-recipient">
+    {{ fields.provider_name }}<br>
+    {{ fields.provider_address_line1 }}<br>
+    {% if fields.provider_address_line2 %}{{ fields.provider_address_line2 }}<br>{% endif %}
+    {{ fields.provider_address_city }}, {{ fields.provider_address_state }} {{ fields.provider_address_zip }}
+  </div>
+  <div class="address-page-barcode">{{ barcode_svg | safe }}</div>
+</div>
+
+<!-- Page 2: letter, page 1 of body -->
+<div class="page">
+  {% include "_provider_letter_header.html" %}
+
+  <div class="letter-date">{{ fields.letter_date }}</div>
+
+  <div class="recipient-block">
+    {{ fields.provider_name }}<br>
+    {{ fields.provider_address_line1 }}<br>
+    {% if fields.provider_address_line2 %}{{ fields.provider_address_line2 }}<br>{% endif %}
+    {{ fields.provider_address_city }}, {{ fields.provider_address_state }} {{ fields.provider_address_zip }}
+  </div>
+
+  <div class="re-block">
+    RE: &nbsp;Provider Name: {{ fields.provider_name }}<br>
+    <span class="re-line2">NH Medicaid Provider ID: {{ fields.nh_medicaid_provider_id }}</span>
+  </div>
+
+  <div class="letter-title">PROVIDER REVALIDATION FINAL NOTICE</div>
+
+  <div class="salutation">Dear {{ fields.provider_name }}:</div>
+
+  <div class="body-text">
+    <p>In accordance with the Affordable Care Act, the New Hampshire Medicaid Program requires providers to verify enrollment information at least every five years. This is called revalidation. You were notified by two previous letters that you had been selected to revalidate your enrollment information.</p>
+    <p class="center-block">Failure to complete your revalidation by {{ fields.revalidation_due_date }} will result in the termination of your enrollment in the NH Medicaid program.</p>
+    <p>If you disagree with this determination, you have the right to an appeal within thirty (30) days of the date of this letter by contacting:</p>
+    <p class="center-block no-indent">
+      {{ shared.provider_appeals_unit }}<br>
+      {{ shared.prov_appeals_addr_line1 }}<br>
+      {{ shared.prov_appeals_addr_line2 }}<br>
+      {{ shared.prov_appeals_number }}
+    </p>
+    <p>To initiate the revalidation process, please visit www.nhmmis.nh.gov. Once logged in, select <em>Revalidation</em> from the <em>Quick Links</em> and an instruction page will be presented. Please click on <em>Start Revalidation</em> located in the bottom right-hand corner and your current enrollment data will be displayed. You will be given the option to either confirm or update your information. If you have started the revalidation process and have not completed it, please do so immediately.</p>
+  </div>
+</div>
+
+<!-- Page 3: continuation of letter body -->
+<div class="page">
+  <div class="continuation-header">
+    {{ fields.letter_date }}<br>
+    Page 2
+  </div>
+
+  <div class="body-text">
+    <p>If you do not have an active user ID for NH MMIS portal access, then select <em>Register Here</em> and follow instructions. If you have forgotten your user ID and/or password, then select <em>Forgot User ID or Password?</em> and follow instructions. If neither of these options result in NH MMIS access, you must complete the <strong>Change of Provider Information Form</strong> which is available in the NH MMIS portal under <em>Quick Links, Documents and Forms</em>. Once completed, please fax the form to {{ shared.prov_rel_fax_number }} or email to {{ shared.provider_relations_email }}.</p>
+    <p>NOTE: Certain changes to your enrollment data will require you to fill out a new enrollment application. A new enrollment application must be completed when:</p>
+    <ul>
+      <li>You want to enroll as a different provider type.</li>
+      <li>Your Tax ID has changed.</li>
+    </ul>
+    <p>Thank you for your prompt response to this request to complete your revalidation. Please visit the NH MMIS portal's <em>Quick Links</em> section and select <em>Revalidation</em> for additional information. If you have further questions, contact New Hampshire Provider Relations between the hours of {{ shared.prov_rel_operation_hours }}, Monday through Friday, at {{ shared.provider_relations_number }} or {{ shared.provider_relations_tollfree }}. Thank you for being a NH Medicaid Provider.</p>
+  </div>
+
+  <div class="signature-block">
+    <p>New Hampshire Medicaid Provider Relations</p>
+  </div>
+
+  <div class="footer-barcode">{{ barcode_svg | safe }}</div>
+  <div class="footer-letter-id">PRV-RVL-L003</div>
+</div>
+
+</body>
+</html>

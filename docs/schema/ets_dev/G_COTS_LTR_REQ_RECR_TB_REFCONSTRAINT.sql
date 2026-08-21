@@ -1,0 +1,10 @@
+--------------------------------------------------------
+--  Ref Constraints for Table G_COTS_LTR_REQ_RECR_TB
+--------------------------------------------------------
+
+  ALTER TABLE "ets_dev"."G_COTS_LTR_REQ_RECR_TB" ADD CONSTRAINT "G_COTS_LTR_REQ_RECR_F3" FOREIGN KEY ("G_CMN_ENTY_SK", "G_E_ADR_USG_TY_CD", "G_E_ADR_SK", "G_E_ADR_USG_SEQ_NUM")
+	  REFERENCES "ets_dev"."G_E_ADR_USG_TB" ("G_CMN_ENTY_SK", "G_E_ADR_USG_TY_CD", "G_E_ADR_SK", "G_E_ADR_USG_SEQ_NUM") ;
+  ALTER TABLE "ets_dev"."G_COTS_LTR_REQ_RECR_TB" ADD CONSTRAINT "G_COTS_LTR_REQ_RECR_F1" FOREIGN KEY ("G_COTS_LTR_REQ_SK")
+	  REFERENCES "ets_dev"."G_COTS_LTR_REQ_TB" ("G_COTS_LTR_REQ_SK") ;
+  ALTER TABLE "ets_dev"."G_COTS_LTR_REQ_RECR_TB" ADD CONSTRAINT "G_COTS_LTR_REQ_RECR_F2" FOREIGN KEY ("G_CMN_ENTY_SK", "G_ADR_USG_TY_CD", "G_ADR_SK", "G_ADR_USG_SEQ_NUM")
+	  REFERENCES "ets_dev"."G_ADR_USG_TB" ("G_CMN_ENTY_SK", "G_ADR_USG_TY_CD", "G_ADR_SK", "G_ADR_USG_SEQ_NUM") ;

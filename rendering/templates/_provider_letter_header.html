@@ -1,0 +1,39 @@
+{#
+  Shared agency letterhead block — confirmed byte-identical (same
+  measured PDF coordinates) across PRV-MNT-L001, PRV-RVL-L006, and
+  PRV-RVL-L003's legacy samples. {% include %} this into any
+  Provider-domain prose letter rather than copy-pasting it — see
+  middleware/data_unification/shared/agency_params.py for the
+  R_PARAM_DTL_TB-backed fields used below.
+
+  Expects in context: letterhead (dict from fetch_letterhead()),
+  state_seal_path.
+
+  Coordinates measured via pdfplumber against the legacy PDFs (see
+  docs/ARCHITECTURE.md). Vertical positions (top) are the
+  well-established-reliable dimension per the PRV-ENR-L016 template
+  work; horizontal centering uses CSS text-align:center over a fixed
+  central column rather than hardcoded per-line x0 (those vary with
+  each line's rendered text width even in the legacy PDF, so matching
+  a specific x0 wouldn't generalize to different param values anyway).
+#}
+<div class="letterhead">
+  <img class="agency-seal" src="{{ state_seal_path }}" alt="State Seal">
+  <div class="agency-title">
+    <p>STATE OF NEW HAMPSHIRE</p>
+    <p>DEPARTMENT OF HEALTH AND HUMAN SERVICES</p>
+    <p>{{ letterhead.division_name | default("DIVISION OF MEDICAID SERVICES") }}</p>
+  </div>
+  <div class="agency-officials">
+    <p class="official-name">{{ letterhead.commissioner_name }}</p>
+    <p class="official-title">Commissioner</p>
+    <p class="official-name">{{ letterhead.medicaid_director_name }}</p>
+    <p class="official-title">{{ letterhead.director_title | default("Director") }}</p>
+  </div>
+  <div class="agency-contact">
+    <p>{{ letterhead.agency_address_line1 }}</p>
+    <p>{{ letterhead.toll_free_number }}</p>
+    <p>{{ letterhead.fax_label_and_number }}</p>
+    <p>{{ letterhead.website_address }}</p>
+  </div>
+</div>

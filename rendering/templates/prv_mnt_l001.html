@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+{% include "_provider_letter_styles.html" %}
+</style>
+</head>
+<body>
+
+<!-- Page 1: address-only window envelope page -->
+<div class="page">
+  <div class="address-page-date">{{ fields.letter_date_short }}</div>
+  <div class="address-page-recipient">
+    {{ fields.provider_name }}<br>
+    {{ fields.provider_address_line1 }}<br>
+    {% if fields.provider_address_line2 %}{{ fields.provider_address_line2 }}<br>{% endif %}
+    {{ fields.provider_address_city }}, {{ fields.provider_address_state }} {{ fields.provider_address_zip }}
+  </div>
+  <div class="address-page-barcode">{{ barcode_svg | safe }}</div>
+</div>
+
+<!-- Page 2: full letter -->
+<div class="page">
+  {% include "_provider_letter_header.html" %}
+
+  <div class="letter-date">{{ fields.letter_date }}</div>
+
+  <div class="recipient-block">
+    {{ fields.provider_name }}<br>
+    {{ fields.provider_address_line1 }}<br>
+    {% if fields.provider_address_line2 %}{{ fields.provider_address_line2 }}<br>{% endif %}
+    {{ fields.provider_address_city }}, {{ fields.provider_address_state }} {{ fields.provider_address_zip }}
+  </div>
+
+  <div class="re-block">RE: NH Provider #: {{ fields.provider_id }}</div>
+
+  <div class="salutation">Dear {{ fields.provider_name }}:</div>
+
+  <div class="body-text">
+    <p>This is a second reminder that NH Medicaid cannot pay your claims for dates of service beginning after your license, certification, or registration, expires on {{ fields.license_expiration_date }}.</p>
+    <p>Please contact your applicable board to renew your license, certification, or registration and then provide a current copy no later than one week before the expiration date noted above to NH Medicaid by FAX at 1-866-446-3318, or e-mail to NHProviderRelations@conduent.com.</p>
+    <p>If we do not receive a copy of your current license, certification, or registration by the expiration date noted above, claims will be placed in a suspended status and payment held for at least 30 days from the expiration date. We hope that you will make every effort to provide the requested information so that claims can be removed from suspended status and paid, rather than denied.</p>
+    <p>We thank you for your continued participation in the NH Medicaid program and the assistance you provide to our Medicaid members. If you have any questions, please contact NH Medicaid Provider Relations at 603-223-4774 or 866-291-1674. You may also contact provider relations to confirm receipt of your updated document.</p>
+  </div>
+
+  <div class="signature-block">
+    <p>Sincerely,</p>
+    <p>NH Medicaid Provider Relations</p>
+  </div>
+
+  <div class="footer-barcode">{{ barcode_svg | safe }}</div>
+  <div class="footer-label">30-Day Recertification Notice<br>PRV-MNT-L001</div>
+</div>
+
+</body>
+</html>

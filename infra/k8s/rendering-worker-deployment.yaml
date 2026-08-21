@@ -1,0 +1,66 @@
+# Stateless rendering worker — scales horizontally on internal K8s (NFR 5.3).
+# Consumes from RabbitMQ/Kafka, renders one letter, never persists PHI to disk.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rendering-worker
+  namespace: doc-platform
+  labels:
+    app: rendering-worker
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: rendering-worker
+  template:
+    metadata:
+      labels:
+        app: rendering-worker
+    spec:
+      # NFR 5.1: no outbound internet access from rendering pods
+      automountServiceAccountToken: false
+      containers:
+        - name: rendering-worker
+          image: registry.internal.local/doc-platform/rendering-worker:latest
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          env:
+            - name: QUEUE_HOST
+              value: rabbitmq.doc-platform.svc.cluster.local
+            - name: QUEUE_NAME
+              value: render-jobs
+            - name: DLQ_NAME
+              value: render-jobs-dlq
+          volumeMounts:
+            - name: templates
+              mountPath: /app/templates
+              readOnly: true
+      volumes:
+        - name: templates
+          configMap:
+            name: rendering-templates
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rendering-worker-hpa
+  namespace: doc-platform
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rendering-worker
+  minReplicas: 4
+  maxReplicas: 40
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
